@@ -7,7 +7,6 @@ public struct TextChunker {
         
         var dirtyResults: [String] = input.split { character in return splits.contains(character) }.compactMap({String($0)})
         
-        print(dirtyResults)
         var builder: String = ""
         while(!dirtyResults.isEmpty) {
             // Append a period because we just removed all of them
