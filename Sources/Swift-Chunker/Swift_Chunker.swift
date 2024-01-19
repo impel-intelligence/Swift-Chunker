@@ -27,6 +27,7 @@ public struct TextChunker {
             results.append(builder)
         }
 
+        results.removeAll(where: {$0.isEmpty})
         return results
     }
 }
