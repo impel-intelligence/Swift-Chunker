@@ -16,6 +16,7 @@ public struct TextChunker {
                 // Reset the string builder and then append the overlap into the next one.
                 results.append(builder)
                 
+                guard builder.count - overlap >= 0 else { break }
                 let overlapOffset = builder.index(builder.endIndex, offsetBy: -overlap)
                 builder = String(builder[overlapOffset...])
             }
