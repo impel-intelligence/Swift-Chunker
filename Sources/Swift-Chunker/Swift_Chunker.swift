@@ -10,13 +10,20 @@ public struct TextChunker {
         var builder: String = ""
         while(!dirtyResults.isEmpty) {
             // Append a period because we just removed all of them
-            let nextResult = dirtyResults.removeFirst()
+            var nextResult = dirtyResults.removeFirst()
+            
+            if nextResult.count > maxLength {
+                let maxOffset = nextResult.index(nextResult.startIndex, offsetBy: maxLength)
+                let hold = String(nextResult[maxOffset..<nextResult.endIndex])
+                
+                nextResult = String(nextResult[nextResult.startIndex..<maxOffset])
+                dirtyResults.insert(hold, at: 1)
+            }
             
             if (builder.count + nextResult.count) > maxLength {
                 // Reset the string builder and then append the overlap into the next one.
                 results.append(builder)
                 
-                guard builder.count - overlap >= 0 else { break }
                 let overlapOffset = builder.index(builder.endIndex, offsetBy: -overlap)
                 builder = String(builder[overlapOffset...])
             }
