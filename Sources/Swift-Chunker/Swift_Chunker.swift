@@ -17,7 +17,7 @@ public struct TextChunker {
                 let hold = String(nextResult[maxOffset..<nextResult.endIndex])
                 
                 nextResult = String(nextResult[nextResult.startIndex..<maxOffset])
-                dirtyResults.insert(hold, at: 1)
+                dirtyResults.insert(hold, at: 0)
             }
             
             if (builder.count + nextResult.count) > maxLength {
