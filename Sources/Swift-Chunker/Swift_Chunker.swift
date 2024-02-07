@@ -23,7 +23,12 @@ public struct TextChunker {
                 // Reset the string builder and then append the overlap into the next one.
                 results.append(builder)
                 
-                let overlapOffset = builder.index(builder.endIndex, offsetBy: -overlap)
+                let overlapOffset: String.Index
+                if overlap >= builder.count {
+                    overlapOffset = builder.startIndex
+                } else {
+                    overlapOffset = builder.index(builder.endIndex, offsetBy: -overlap)
+                }
                 builder = String(builder[overlapOffset...])
             }
             
