@@ -1,6 +1,8 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+import Foundation
+
 public struct TextChunker {
     public static func chunkText(input: String, splits: [Character], targetCharacters: Int, overlap: Int) -> [String] {
         var results: [String] = []
@@ -40,7 +42,8 @@ public struct TextChunker {
         
     public static func chunkText(input: String, targetWords: Int, wordOverlap: Int) -> [String] {
         var results: [String] = []
-        var dirtySplits = input.split(separator: "\n").compactMap({String($0).split(separator: " ")})
+        
+        var dirtySplits: [[String.SubSequence]] = input.split(separator: "\n").compactMap({String($0).split(separator: " ")})
         
         while !dirtySplits.isEmpty {
             let currentWords = dirtySplits.removeFirst()
@@ -70,5 +73,36 @@ public struct TextChunker {
         return results
     }
 
+    public static func chunkText(input: String, targetTokens: Int, tokenCharacterLength: Int, tokenOverlap: Int) -> [String] {
+        guard tokenOverlap < targetTokens else { return [] }
+        
+        var tokenSets: [[String]] = [[]]
+        var mutableInput = input
+        
+        var tokenBuilder = ""
+        var counter: Int = 0
+        while !mutableInput.isEmpty {
+            let character = mutableInput.removeFirst()
+            
+            if counter == tokenCharacterLength {
+                // Check if we need to create a new tokenSet, if so add the overlap here
+                if tokenSets[tokenSets.count - 1].count >= targetTokens {
+                    var overlap = tokenSets[tokenSets.count - 1]
+                    let numberToDrop = overlap.count - tokenOverlap
+                    overlap.removeFirst(numberToDrop)
+                    
+                    tokenSets.append(overlap)
+                }
+                
+                tokenSets[tokenSets.count - 1].append(tokenBuilder)
+                tokenBuilder = ""
+                counter = 0
+            }
+            
+            tokenBuilder += String(character)
+            counter += 1
+        }
+        
+        return tokenSets.compactMap({$0.joined()})
+    }
 }
-
