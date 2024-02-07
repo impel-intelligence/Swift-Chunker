@@ -1,8 +1,6 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-import Foundation
-
 public struct TextChunker {
     public static func chunkText(input: String, splits: [Character], targetCharacters: Int, overlap: Int) -> [String] {
         var results: [String] = []
